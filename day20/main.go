@@ -97,10 +97,6 @@ func bfs(curr pair, grid [][]string, portals map[string][]pair) int {
 		top := queue[0]
 		queue = queue[1:]
 
-		if grid[top.p.i][top.p.j] == "ZZ" {
-			return top.steps
-		}
-
 		if visited[top.p] {
 			continue
 		}
@@ -118,7 +114,11 @@ func bfs(curr pair, grid [][]string, portals map[string][]pair) int {
 			if next.p.i >= 0 && next.p.i < len(grid) && next.p.j >= 0 && next.p.j < len(grid[next.p.i]) {
 				nextTile := grid[next.p.i][next.p.j]
 
-				if len(nextTile) == 2 && nextTile != "AA" && nextTile != "ZZ" { // portal
+				if nextTile == "ZZ" {
+					return top.steps
+				}
+
+				if len(nextTile) == 2 && nextTile != "AA" { // portal
 					other := getOtherLocation(portals[nextTile], next.p)
 					log.Println("taking portal from", next, "to", other)
 					queue = append(queue, pairSteps{p: other, steps: top.steps})
